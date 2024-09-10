@@ -1,0 +1,61 @@
+package withPackage;
+
+import jakarta.json.Json;
+import jakarta.json.JsonArrayBuilder;
+import jakarta.json.JsonObjectBuilder;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+// Employee Model
+class Employee {
+    private String name;
+    private String email;
+
+    public Employee(String name, String email) {
+        this.name = name;
+        this.email = email;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+}
+
+// Servlet using @WebServlet
+@WebServlet("/service/employees")
+public class EmployeeServlet extends HttpServlet {
+
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        resp.setContentType("application/json");
+        resp.setCharacterEncoding("UTF-8");
+
+        // Create a list of Employee objects
+        List<Employee> employees = new ArrayList<>();
+        employees.add(new Employee("John", "john.doe@mail.com"));
+        employees.add(new Employee("Harry", "harry.harry@mail.com"));
+        employees.add(new Employee("Jerry", "jerry.doe@mail.com"));
+
+        // Convert Employee list to JSON
+        JsonArrayBuilder jsonArray = Json.createArrayBuilder();
+        for (Employee employee : employees) {
+            JsonObjectBuilder jsonObject = Json.createObjectBuilder();
+            jsonObject.add("name", employee.getName());
+            jsonObject.add("email", employee.getEmail());
+            jsonArray.add(jsonObject);
+        }
+
+        // Output the JSON array
+        resp.getWriter().write(jsonArray.build().toString());
+    }
+}
