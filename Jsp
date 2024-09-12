@@ -1,0 +1,43 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Employee List</title>
+</head>
+<body>
+
+    <h1>Employee List</h1>
+
+    <table border="1">
+        <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Age</th>
+        </tr>
+
+        <% 
+            // Corrected scriptlet
+            List<String[]> csvData = (List<String[]>) request.getAttribute("csvData");
+            if (csvData != null) {
+                for (String[] e : csvData) {
+        %>
+                    <tr>
+                        <td><%= e[0] %></td>
+                        <td><%= e[1] %></td>
+                        <td><%= e[2] %></td>
+                    </tr>
+        <% 
+                }
+            } else {
+        %>
+                <tr>
+                    <td colspan="3">No data available</td>
+                </tr>
+        <% 
+            } 
+        %>
+    </table>
+
+</body>
+</html>
